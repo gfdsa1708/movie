@@ -17,7 +17,7 @@ export default {
   created () {
     this.$http.get('/api/actor')
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
       }
         ,(err) => {console.log(err)})
     .catch((err) => {console.log(err)});

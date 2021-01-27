@@ -11,7 +11,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/actor', function(req, res, next) {
-  connection.query('SELECT actor_id as actorId, first_name as firstName, last_name as lastName, last_update as lastUpdate, birth_date as birthDate FROM ACTOR', (error, data) => {
+  connection.query(`
+  SELECT 
+    actor_id as actorId
+    , first_name as firstName
+    , last_name as lastName
+    , last_update as lastUpdate 
+  FROM 
+    ACTOR`, (error, data) => {
     if (error) throw error;
     res.send(data);
   });
