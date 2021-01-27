@@ -11,7 +11,7 @@
                 src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
                 ></v-img>
 
-                <v-card-title class="d-inline-block">{{film.title}}</v-card-title>
+                <v-card-title class="d-inline-block">{{film.title}} {{film.film_id}}</v-card-title>
                 <v-chip>{{film.category}}</v-chip>
                 <v-card-text>
                 <v-row
@@ -42,10 +42,10 @@
                 <v-card-actions>
                     <v-row>
                         <v-col cols="6">
-                            <v-btn color="deep-purple lighten-2 d-block" text>Reserve</v-btn>
+                            <v-btn color="deep-purple lighten-2" block outlined>Reserve</v-btn>
                         </v-col>
                         <v-col cols="6">
-                            <v-btn color="deep-purple lighten-2" text>Reserve</v-btn>
+                            <v-btn color="deep-purple lighten-2" block outlined>Reserve</v-btn>
                         </v-col>
                     </v-row>
                 </v-card-actions>
@@ -56,7 +56,7 @@
     <v-pagination class="mt-10"
       v-model="page"
       :length="15"
-        @input="next"
+      @input="next"
     ></v-pagination>
   </div>
 </v-container>
@@ -73,7 +73,13 @@
         },
         methods: {
             next(page) {
-                console.log(page)
+                this.page = page;
+                //this.$router.push(`/film/${page}`);
+                this.$http.get('/api/film',{params :{pageNo : this.page}})
+                .then((res) => {this.filmList = res.data});
+            },
+            asd() {
+                return false;
             }
         },
         created () {
@@ -84,5 +90,5 @@
 </script>
 
 <style lang="scss" scoped>
-.card {display: flex;}
+
 </style>
