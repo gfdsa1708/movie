@@ -24,4 +24,14 @@ router.get('/actor', function(req, res, next) {
   });
 });
 
+router.get('/film', function(req, res, next) {
+  const limit = 12;
+  console.log(req)
+  connection.query(`
+  select f.*, c.name as category from film f inner join film_category fc on f.film_id = fc.film_id inner join category c on fc.category_id =c.category_id order by f.film_id limit ${limit}
+    `, (error, data) => {
+    if (error) throw error;
+    res.send(data);
+  });
+});
 module.exports = router;
