@@ -1,0 +1,12 @@
+CREATE TABLE sakila.reply (
+	reply_id BIGINT auto_increment NOT NULL,
+	film_id SMALLINT NOT NULL,
+	comment varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	CONSTRAINT reply_pk PRIMARY KEY (reply_id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci
+AUTO_INCREMENT=1;
+
+ALTER TABLE sakila.reply ADD customer_id SMALLINT NOT NULL;

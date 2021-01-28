@@ -2,13 +2,21 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import FilmList from '@/components/FilmList.vue';
+import Film from '@/components/Film.vue';
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/film/:pageNo',
+    path: '/films/page/:pageNo',
     name: 'FilmList',
-    component: FilmList
+    component: FilmList,
+    props: (route) => ({pageNo : Number(route.params.pageNo)})  
+  },
+  {
+    path: '/film/:filmId',
+    name: 'Film',
+    component: Film,
+    props: (route) => ({filmId : Number(route.params.filmId)})  
   },
   {
     path: '/about',

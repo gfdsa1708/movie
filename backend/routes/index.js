@@ -24,11 +24,41 @@ router.get('/actor', function(req, res, next) {
   });
 });
 
-router.get('/film', function(req, res, next) {
+router.get('/films/page', function(req, res, next) {
   const limit = 12;
   const offset = (req.query.pageNo-1) * limit;
   connection.query(`
   select f.*, c.name as category from film f inner join film_category fc on f.film_id = fc.film_id inner join category c on fc.category_id =c.category_id order by f.film_id limit ${limit} offset ${offset}
+    `, (error, data) => {
+    if (error) throw error;
+    res.send(data);
+  });
+});
+
+router.get('/film', function(req, res, next) {
+  const filmId = req.query.filmId
+  connection.query(`
+  select f.*, c.name as category 
+  from film f 
+  inner join film_category fc 
+  on f.film_id = fc.film_id 
+  inner join category c 
+  on fc.category_id =c.category_id 
+  where f.film_id = ${filmId}
+    `, (error, data) => {
+    if (error) throw error;
+    res.send(data);
+  });
+});
+
+router.get('/reply', function(req, res, next) {
+  const filmId = req.query.filmId
+  connection.query(`
+  select c.first_name , c.last_name ,r.comment 
+  from reply r 
+  inner join customer c
+  on c.customer_id = r.customer_id 
+  where r.film_id = ${filmId}
     `, (error, data) => {
     if (error) throw error;
     res.send(data);

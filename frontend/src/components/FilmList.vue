@@ -3,8 +3,8 @@
     <v-row>
         <v-col cols="12" lg="3" md="4" sm="6" xs="12" v-for="film in filmList" :key="film.id">
             <v-card
-                tile
                 max-width="374"
+                @cilck="detail"
             >
                 <v-img
                 height="250"
@@ -42,7 +42,7 @@
                 <v-card-actions>
                     <v-row>
                         <v-col cols="6">
-                            <v-btn color="deep-purple lighten-2" block outlined>Reserve</v-btn>
+                            <v-btn color="deep-purple lighten-2" @click="detail(film.film_id)" block outlined >상세보기</v-btn>
                         </v-col>
                         <v-col cols="6">
                             <v-btn color="deep-purple lighten-2" block outlined>Reserve</v-btn>
@@ -71,19 +71,26 @@
                 page: 1
             }
         },
+        props: {
+            pageNo: {
+                type: Number
+            },
+        },
         methods: {
             next(page) {
-                this.page = page;
-                //this.$router.push(`/film/${page}`);
-                this.$http.get('/api/film',{params :{pageNo : this.page}})
+                this.$router.push({name:'FilmList',params:{pageNo:this.page}});
+                this.$http.get('/api/films/page',{params :{pageNo : this.page}})
                 .then((res) => {this.filmList = res.data});
             },
             asd() {
                 return false;
-            }
+            },
+            detail(filmId){
+                this.$router.push({name:'Film',params:{filmId:filmId}});
+            },
         },
         created () {
-            this.$http.get('/api/film',{params :{pageNo : this.page}})
+            this.$http.get('/api/films/page',{params :{pageNo : this.pageNo}})
             .then((res) => {this.filmList = res.data});
         },
     }
