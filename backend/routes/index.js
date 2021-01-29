@@ -51,6 +51,23 @@ router.get('/film', function(req, res, next) {
   });
 });
 
+router.get('/actor/film', function(req, res, next) {
+  const filmId = req.query.filmId
+  connection.query(`
+  select concat(a.first_name,' ',a.last_name) as fullName
+  ,a.actor_id  
+  from film f 
+  inner join film_actor fa
+  on f.film_id = fa.film_id 
+  inner join actor a
+  on fa.actor_id = a.actor_id 
+  where f.film_id = ${filmId}
+    `, (error, data) => {
+    if (error) throw error;
+    res.send(data);
+  });
+});
+
 router.get('/reply', function(req, res, next) {
   const filmId = req.query.filmId
   connection.query(`
@@ -59,6 +76,28 @@ router.get('/reply', function(req, res, next) {
   inner join customer c
   on c.customer_id = r.customer_id 
   where r.film_id = ${filmId}
+    `, (error, data) => {
+    if (error) throw error;
+    res.send(data);
+  });
+});
+
+router.post('/reply/write', function(req, res, next) {
+  const params = req.body.params;
+  const {filmId, customerId, comment} = params;
+  connection.query(`
+  insert into reply
+  ( 
+    film_id
+    ,customer_id
+    ,comment
+  )
+  values
+  (
+    ${filmId}
+    ,${customerId}
+    ,'${comment}'
+  )
     `, (error, data) => {
     if (error) throw error;
     res.send(data);

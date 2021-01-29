@@ -11,8 +11,8 @@
                 src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
                 ></v-img>
 
-                <v-card-title class="d-inline-block">{{film.title}} {{film.film_id}}</v-card-title>
-                <v-chip>{{film.category}}</v-chip>
+                <v-card-title class="d-inline-block">{{film.title}}</v-card-title>
+                <v-chip color="yellow">{{film.category}}</v-chip>
                 <v-card-text>
                 <v-row
                     align="center"
@@ -36,16 +36,16 @@
                     ${{film.rental_rate}}
                 </div>
 
-                <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
+            
                 </v-card-text>
 
                 <v-card-actions>
                     <v-row>
                         <v-col cols="6">
-                            <v-btn color="deep-purple lighten-2" @click="detail(film.film_id)" block outlined >상세보기</v-btn>
+                            <v-btn color="blue lighten-2" @click="detail(film.film_id)" block outlined >상세보기</v-btn>
                         </v-col>
                         <v-col cols="6">
-                            <v-btn color="deep-purple lighten-2" block outlined>Reserve</v-btn>
+                            <v-btn color="blue lighten-2" block outlined>Reserve</v-btn>
                         </v-col>
                     </v-row>
                 </v-card-actions>
@@ -92,6 +92,7 @@
         created () {
             this.$http.get('/api/films/page',{params :{pageNo : this.pageNo}})
             .then((res) => {this.filmList = res.data});
+            this.page = this.pageNo;
         },
     }
 </script>
