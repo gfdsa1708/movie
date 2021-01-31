@@ -78,7 +78,10 @@
 
     methods: {
       validate () {
-        if(this.$refs.form.validate()) console.log('완료')
+        const user = {username : this.firstName, password : this.lastName}
+        this.$http.post('/api/users/login',{params:user})
+        .then( res => {if(res.data)window.sessionStorage.setItem('id',res.data[0].username)})
+        // if(this.$refs.form.validate()) console.log('완료')
       },
       reset () {
         this.$refs.form.reset()
