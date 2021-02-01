@@ -71,7 +71,7 @@ router.get('/actor/film', function(req, res, next) {
 router.get('/reply', function(req, res, next) {
   const filmId = req.query.filmId
   connection.query(`
-  select c.first_name , c.last_name ,r.comment 
+  select concat(c.first_name ,' ',c.last_name) as username ,r.comment, r.reply_id 
   from reply r 
   inner join customer c
   on c.customer_id = r.customer_id 
@@ -98,6 +98,18 @@ router.post('/reply/write', function(req, res, next) {
     ,${customerId}
     ,'${comment}'
   )
+    `, (error, data) => {
+    if (error) throw error;
+    res.send(data);
+  });
+});
+
+router.post('/reply/delete', function(req, res, next) {
+  const params = req.body.params;
+  const {filmId} = params;
+  connection.query(`
+  delete from reply
+  where reply_id=${filmId}
     `, (error, data) => {
     if (error) throw error;
     res.send(data);

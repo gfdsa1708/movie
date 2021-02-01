@@ -1,6 +1,6 @@
 <template>
 <v-container>
-  <v-simple-table class="mt-5">
+  <!-- <v-simple-table class="mt-5">
     <template v-slot:default>
           <colgroup>
           <col width="20%">
@@ -15,8 +15,24 @@
         </tr>
       </tbody>
     </template>
-  </v-simple-table>
+  </v-simple-table> -->
 
+<v-data-table
+    :headers="headers"
+    :items="replys"
+    class="elevation-1"
+  >
+    <template v-slot:item.actions="{ item }">
+      <v-icon
+        medium
+        color='red'
+        @click="removeReply(item.reply_id)"
+      >
+        mdi-delete
+      </v-icon>
+    </template>
+
+  </v-data-table>
   <v-row class="mt-5">
       <v-col cols="1" class="d-flex justify-center align-center">
           <span class="">댓글</span>
@@ -41,7 +57,12 @@
         name:'Reply',
         data() {
             return {
-                replys: '',
+                replys: [],
+                headers: [
+                            { text:'username',value:'username' },
+                            { text:'comment',value:'comment' },
+                            { text:'action',value:'actions' }
+                          ],
                 comment:''
             }
         },
@@ -49,7 +70,11 @@
         methods: {
           getReplys(){
             this.$http.get('/api/reply',{params :{filmId : this.filmId}})
-            .then( res => {this.replys = res.data});
+            .then( res => 
+            { const replys = []
+              replys.push(...res.data);
+              this.replys = replys;
+          });
           },
           writeReply(){
             if(this.comment === '') return;
@@ -60,8 +85,9 @@
             .then( res => {this.comment='';
                            this.getReplys()});
           },
-          removeReply(){
-            console.log(replyId)
+          removeReply(replyId){
+            this.$http.post('/api/reply/delete',{params :replyId})
+            .then( res => {this.getReplys()});
           }
         },
         created () {
